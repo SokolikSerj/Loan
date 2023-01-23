@@ -115,7 +115,6 @@ var __webpack_exports__ = {};
 /*!************************!*\
   !*** ./src/js/main.js ***!
   \************************/
-<<<<<<< HEAD
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/slider */ "./src/js/modules/slider.js");
 
@@ -125,9 +124,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 })();
 
-=======
-window.addEventListener('DOMContentLoaded', () => {});
->>>>>>> 793c355cf05080059a28b90a9a7266e9098f9d5c
 /******/ })()
 ;
 //# sourceMappingURL=script.js.map
