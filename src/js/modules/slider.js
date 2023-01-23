@@ -5,7 +5,7 @@ export default class Slider {
         this.btns = document.querySelectorAll(btns);
         this.slideIndex = 1;
     }
-
+ 
     showSlides(n) {
         if (n > this.slides.length) {
             this.slideIndex = 1;
