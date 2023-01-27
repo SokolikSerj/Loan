@@ -57,7 +57,7 @@ export default class Mask {
             this.selector.forEach(input => {
                 input.addEventListener('input', () => {
                     let str = input.value;
-                    input.value = str.replace(/[а-яё]/ig, '');
+                    input.value = str.replace(/[^a-z 0-9 @ \.]/ig, "");
                 });
             });
         }

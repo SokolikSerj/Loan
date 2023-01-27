@@ -1,13 +1,10 @@
 import { postData } from "../services/requests";
 
 export default class Forms {
-    constructor(selector, path) {
+    constructor(selector, url) {
         this.selector = document.querySelectorAll(selector);
-        this.path = path;
-    }
-
-    init() {
-        const message = {
+        this.path = url;
+        this.message = {
             loading: 'Загрузка',
             success: 'Спасибо! Скоро мы с Вами свяжемся',
             failure: 'Что-то пошло не так',
@@ -15,7 +12,9 @@ export default class Forms {
             ok: 'assets/img/ok.png',
             fail: 'assets/img/fail.png',
         };
+    }
 
+    init() {
         this.selector.forEach(form => {
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -26,7 +25,7 @@ export default class Forms {
                     justify-content: space-around;
                     align-items: center;
                     max-width: 340px;
-                    background: rgba(216,216,216,.7);
+                    background: grey;
                     border-radius: 4px;
                     margin: 10px 0 0 0;
                     padding: 8px;
@@ -42,7 +41,7 @@ export default class Forms {
                     heigth: 65px;
                     width: 65px;
                 `;
-                statusImg.setAttribute('src', message.spinner);
+                statusImg.setAttribute('src', this.message.spinner);
                 statusImg.classList.add('animated', 'fadeInUp');
                 statusMessage.appendChild(statusImg);
 
@@ -51,7 +50,7 @@ export default class Forms {
                 textMessage.style.cssText = `
                     
                 `;
-                textMessage.textContent = message.loading;
+                textMessage.textContent = this.message.loading;
                 statusMessage.appendChild(textMessage);
 
                 const formData = new FormData(form);
@@ -59,12 +58,12 @@ export default class Forms {
                 postData(this.path, formData)
                     .then(res => {
                         console.log(res);
-                        statusImg.setAttribute('src', message.ok);
-                        textMessage.textContent = message.success;
+                        statusImg.setAttribute('src', this.message.ok);
+                        textMessage.textContent = this.message.success;
                     })
                     .catch(() => {
-                        statusImg.setAttribute('src', message.fail);
-                        textMessage.textContent = message.failure;
+                        statusImg.setAttribute('src', this.message.fail);
+                        textMessage.textContent = this.message.failure;
                     })
                     .finally(() => {
                         form.reset();

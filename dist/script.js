@@ -62,12 +62,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
 
 class Forms {
-  constructor(selector, path) {
+  constructor(selector, url) {
     this.selector = document.querySelectorAll(selector);
-    this.path = path;
-  }
-  init() {
-    const message = {
+    this.path = url;
+    this.message = {
       loading: 'Загрузка',
       success: 'Спасибо! Скоро мы с Вами свяжемся',
       failure: 'Что-то пошло не так',
@@ -75,6 +73,8 @@ class Forms {
       ok: 'assets/img/ok.png',
       fail: 'assets/img/fail.png'
     };
+  }
+  init() {
     this.selector.forEach(form => {
       form.addEventListener('submit', e => {
         e.preventDefault();
@@ -84,7 +84,7 @@ class Forms {
                     justify-content: space-around;
                     align-items: center;
                     max-width: 340px;
-                    background: rgba(216,216,216,.7);
+                    background: grey;
                     border-radius: 4px;
                     margin: 10px 0 0 0;
                     padding: 8px;
@@ -98,7 +98,7 @@ class Forms {
                     heigth: 65px;
                     width: 65px;
                 `;
-        statusImg.setAttribute('src', message.spinner);
+        statusImg.setAttribute('src', this.message.spinner);
         statusImg.classList.add('animated', 'fadeInUp');
         statusMessage.appendChild(statusImg);
         let textMessage = document.createElement('div');
@@ -106,16 +106,16 @@ class Forms {
         textMessage.style.cssText = `
                     
                 `;
-        textMessage.textContent = message.loading;
+        textMessage.textContent = this.message.loading;
         statusMessage.appendChild(textMessage);
         const formData = new FormData(form);
         (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.postData)(this.path, formData).then(res => {
           console.log(res);
-          statusImg.setAttribute('src', message.ok);
-          textMessage.textContent = message.success;
+          statusImg.setAttribute('src', this.message.ok);
+          textMessage.textContent = this.message.success;
         }).catch(() => {
-          statusImg.setAttribute('src', message.fail);
-          textMessage.textContent = message.failure;
+          statusImg.setAttribute('src', this.message.fail);
+          textMessage.textContent = this.message.failure;
         }).finally(() => {
           form.reset();
           setTimeout(() => {
@@ -193,7 +193,7 @@ class Mask {
       this.selector.forEach(input => {
         input.addEventListener('input', () => {
           let str = input.value;
-          input.value = str.replace(/[а-яё]/ig, '');
+          input.value = str.replace(/[^a-z 0-9 @ \.]/ig, "");
         });
       });
     }
@@ -598,11 +598,13 @@ window.addEventListener('DOMContentLoaded', () => {
   const player = new _modules_playVideo__WEBPACK_IMPORTED_MODULE_2__["default"]('.showup .play', '.overlay');
   player.init();
   new _modules_difference__WEBPACK_IMPORTED_MODULE_3__["default"]('.officerold', '.officernew', '.officer__card-item').init();
-  new _modules_mask__WEBPACK_IMPORTED_MODULE_4__["default"]({
-    selector: '[name="phone"]',
-    template: '+1 (___) ___ ____',
-    type: 'phone'
-  }).init();
+
+  // new Mask({
+  //     selector: '[name="phone"]',
+  //     template: '+1 (___) ___ ____',
+  //     type: 'phone'
+  // }).init();
+
   new _modules_mask__WEBPACK_IMPORTED_MODULE_4__["default"]({
     selector: '[name="email"]',
     template: '',
