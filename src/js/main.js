@@ -2,6 +2,8 @@ import MainSlider from "./modules/slider/slider-main";
 import MiniSlider from "./modules/slider/slider-min";
 import VideoPlayer from "./modules/playVideo";
 import Difference from "./modules/difference";
+import Mask from "./modules/mask";
+import Forms from "./modules/forms";
 
 window.addEventListener('DOMContentLoaded', () => {
     const slider = new MainSlider({container: '.page', btns: '.next'});
@@ -38,4 +40,18 @@ window.addEventListener('DOMContentLoaded', () => {
     player.init();
 
     new Difference('.officerold', '.officernew', '.officer__card-item').init();
+
+    new Mask({
+        selector: '[name="phone"]',
+        template: '+1 (___) ___ ____',
+        type: 'phone'
+    }).init();
+
+    new Mask({
+        selector: '[name="email"]',
+        template: '',
+        type: 'text'
+    }).init();
+
+    new Forms('form', 'assets/question.php').init();
 });

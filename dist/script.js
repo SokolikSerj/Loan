@@ -49,6 +49,159 @@ class Difference {
 
 /***/ }),
 
+/***/ "./src/js/modules/forms.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/forms.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Forms)
+/* harmony export */ });
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
+class Forms {
+  constructor(selector, path) {
+    this.selector = document.querySelectorAll(selector);
+    this.path = path;
+  }
+  init() {
+    const message = {
+      loading: 'Загрузка',
+      success: 'Спасибо! Скоро мы с Вами свяжемся',
+      failure: 'Что-то пошло не так',
+      spinner: 'assets/img/spinner.gif',
+      ok: 'assets/img/ok.png',
+      fail: 'assets/img/fail.png'
+    };
+    this.selector.forEach(form => {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        let statusMessage = document.createElement('div');
+        statusMessage.style.cssText = `
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+                    max-width: 340px;
+                    background: rgba(216,216,216,.7);
+                    border-radius: 4px;
+                    margin: 10px 0 0 0;
+                    padding: 8px;
+                    color: #fff;
+                    font-size: 14px;
+                    font-weight: 900;      
+                `;
+        form.parentNode.appendChild(statusMessage);
+        let statusImg = document.createElement('img');
+        statusImg.style.cssText = `
+                    heigth: 65px;
+                    width: 65px;
+                `;
+        statusImg.setAttribute('src', message.spinner);
+        statusImg.classList.add('animated', 'fadeInUp');
+        statusMessage.appendChild(statusImg);
+        let textMessage = document.createElement('div');
+        textMessage.classList.add('animated', 'fadeInUp');
+        textMessage.style.cssText = `
+                    
+                `;
+        textMessage.textContent = message.loading;
+        statusMessage.appendChild(textMessage);
+        const formData = new FormData(form);
+        (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.postData)(this.path, formData).then(res => {
+          console.log(res);
+          statusImg.setAttribute('src', message.ok);
+          textMessage.textContent = message.success;
+        }).catch(() => {
+          statusImg.setAttribute('src', message.fail);
+          textMessage.textContent = message.failure;
+        }).finally(() => {
+          form.reset();
+          setTimeout(() => {
+            statusMessage.remove();
+          }, 5000);
+        });
+      });
+    });
+  }
+}
+
+/***/ }),
+
+/***/ "./src/js/modules/mask.js":
+/*!********************************!*\
+  !*** ./src/js/modules/mask.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Mask)
+/* harmony export */ });
+class Mask {
+  constructor(_ref) {
+    let {
+      selector = null,
+      template = '',
+      type = 'none'
+    } = _ref;
+    this.selector = document.querySelectorAll(selector);
+    this.template = template;
+    this.type = type;
+  }
+  setCursorPosition(pos, elem) {
+    elem.focus();
+    if (elem.setSelectionRange) {
+      elem.setSelectionRange(pos, pos);
+    } else if (elem.createTextRange) {
+      let range = elem.createTextRange();
+      range.collapse(true);
+      range.moveEnd('character', pos);
+      range.moveStart('character', pos);
+      range.select();
+    }
+  }
+  createMask(event) {
+    let matrix = this.template,
+      i = 0,
+      def = matrix.replace(/\D/g, ''),
+      val = event.target.value.replace(/\D/g, '');
+    if (def.length >= val.length) {
+      val = def;
+    }
+    event.target.value = matrix.replace(/./g, function (a) {
+      return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? '' : a;
+    });
+    if (event.type === 'blur') {
+      if (event.target.value.length == 2) {
+        event.target.value = '';
+      }
+    } else {
+      this.setCursorPosition(event.target.value.length, event.target);
+    }
+  }
+  init() {
+    if (this.type === 'phone') {
+      this.selector.forEach(input => {
+        input.addEventListener('input', e => this.createMask(e));
+        input.addEventListener('focus', e => this.createMask(e));
+        input.addEventListener('blur', e => this.createMask(e));
+      });
+    }
+    if (this.type === 'text') {
+      this.selector.forEach(input => {
+        input.addEventListener('input', () => {
+          let str = input.value;
+          input.value = str.replace(/[а-яё]/ig, '');
+        });
+      });
+    }
+  }
+}
+
+/***/ }),
+
 /***/ "./src/js/modules/playVideo.js":
 /*!*************************************!*\
   !*** ./src/js/modules/playVideo.js ***!
@@ -303,6 +456,38 @@ class Slider {
   }
 }
 
+/***/ }),
+
+/***/ "./src/js/services/requests.js":
+/*!*************************************!*\
+  !*** ./src/js/services/requests.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getData": () => (/* binding */ getData),
+/* harmony export */   "postData": () => (/* binding */ postData)
+/* harmony export */ });
+const postData = async (url, data) => {
+  let res = await fetch(url, {
+    method: "POST",
+    body: data
+  });
+  if (!res.ok) {
+    throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+  }
+  return await res.text();
+};
+const getData = async url => {
+  let res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+  }
+  return await res.json();
+};
+
+
 /***/ })
 
 /******/ 	});
@@ -372,6 +557,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_slider_slider_min__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/slider/slider-min */ "./src/js/modules/slider/slider-min.js");
 /* harmony import */ var _modules_playVideo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/playVideo */ "./src/js/modules/playVideo.js");
 /* harmony import */ var _modules_difference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/difference */ "./src/js/modules/difference.js");
+/* harmony import */ var _modules_mask__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/mask */ "./src/js/modules/mask.js");
+/* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
+
+
 
 
 
@@ -409,6 +598,17 @@ window.addEventListener('DOMContentLoaded', () => {
   const player = new _modules_playVideo__WEBPACK_IMPORTED_MODULE_2__["default"]('.showup .play', '.overlay');
   player.init();
   new _modules_difference__WEBPACK_IMPORTED_MODULE_3__["default"]('.officerold', '.officernew', '.officer__card-item').init();
+  new _modules_mask__WEBPACK_IMPORTED_MODULE_4__["default"]({
+    selector: '[name="phone"]',
+    template: '+1 (___) ___ ____',
+    type: 'phone'
+  }).init();
+  new _modules_mask__WEBPACK_IMPORTED_MODULE_4__["default"]({
+    selector: '[name="email"]',
+    template: '',
+    type: 'text'
+  }).init();
+  new _modules_forms__WEBPACK_IMPORTED_MODULE_5__["default"]('form', 'assets/question.php').init();
 });
 })();
 
