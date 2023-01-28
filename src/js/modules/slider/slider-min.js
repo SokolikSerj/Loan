@@ -83,15 +83,16 @@ export default class MiniSlider extends Slider {
     }
 
     init() {
-        this.container.style.cssText = `
+        try {
+            this.container.style.cssText = `
             display: flex;
             flex-wrap: wrap;
             overflow: hidden;
             align-items: flex-start;
         `;
-
-        this.bindTriggers();
-        this.decorizeSlides();
-        this.play();
+            this.bindTriggers();
+            this.decorizeSlides();
+            this.play();
+        } catch (error) {}
     }
 }

@@ -41,11 +41,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     new Difference('.officerold', '.officernew', '.officer__card-item').init();
 
-    // new Mask({
-    //     selector: '[name="phone"]',
-    //     template: '+1 (___) ___ ____',
-    //     type: 'phone'
-    // }).init();
+    new Mask({
+        selector: '[name="phone"]',
+        template: '+1 (___) ___ ____',
+        type: 'phone'
+    }).init();
 
     new Mask({
         selector: '[name="email"]',
