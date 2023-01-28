@@ -6,8 +6,19 @@ import Mask from "./modules/mask";
 import Forms from "./modules/forms";
 
 window.addEventListener('DOMContentLoaded', () => {
-    const slider = new MainSlider({container: '.page', btns: '.next'});
+    const slider = new MainSlider({
+        container: '.page', 
+        btns: '.next'
+    });
     slider.render();
+
+    const sliderSecond = new MainSlider({
+        container: '.moduleapp', 
+        btns: '.next',
+        prevModule: '.prevmodule',
+        nextModule: '.nextmodule'
+    });
+    sliderSecond.render();
 
     const showUpSlider = new MiniSlider({
         container: '.showup__content-slider',
