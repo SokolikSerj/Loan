@@ -10,11 +10,14 @@ export default class VideoPlayer {
             btn.addEventListener('click', () => {
                 if (this.player) {
                     this.overlay.style.display = 'flex';
+                    if (this.path !== btn.getAttribute('data-url')) {
+                        this.path = btn.getAttribute('data-url');
+                        this.player.loadVideoById({videoId: this.path});
+                    }
                 } else {
-                    const path = btn.getAttribute('data-url');
-                    this.createPlayer(path);
+                    this.path = btn.getAttribute('data-url');
+                    this.createPlayer(this.path);
                 }
-
             });
         });
     }
@@ -40,13 +43,15 @@ export default class VideoPlayer {
     }
 
     init() {
-        var tag = document.createElement('script');
+        if (this.btns.length > 0) {
+            var tag = document.createElement('script');
 
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        this.bindTriggers();
-        this.bindCloseBtn();
+            this.bindTriggers();
+            this.bindCloseBtn();
+        }
     }
 }
