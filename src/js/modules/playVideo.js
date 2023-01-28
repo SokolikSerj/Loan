@@ -17,7 +17,8 @@ export default class VideoPlayer {
             } catch (error) {}
 
             btn.addEventListener('click', () => {
-                if ((!btn.closest('.module__video-item') || btn.closest('.module__video-item').getAttribute('data-disable')) !== 'true') {
+                if ((!btn.closest('.module__video-item') || 
+                    btn.closest('.module__video-item').getAttribute('data-disable')) !== 'true') {
                     this.activeBtn = btn;
                     if (this.player) {
                         this.overlay.style.display = 'flex';

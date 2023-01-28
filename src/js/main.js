@@ -4,6 +4,8 @@ import VideoPlayer from "./modules/playVideo";
 import Difference from "./modules/difference";
 import Mask from "./modules/mask";
 import Forms from "./modules/forms";
+import ShowInfo from "./modules/showInfo";
+import Download from "./modules/download";
 
 window.addEventListener('DOMContentLoaded', () => {
     const slider = new MainSlider({
@@ -65,4 +67,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }).init();
 
     new Forms('form', 'assets/question.php').init();
+
+    new ShowInfo('.module__info-show .plus').init();
+
+    new Download('.download').init();
 });
